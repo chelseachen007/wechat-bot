@@ -2,6 +2,7 @@
 node_modules/
 dist/
 wechat-bot.memory-card.js
+wechat.config.js
 npm-debug.log*
 wechat.config.js
 yarn-debug.log*
