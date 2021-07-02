@@ -1,17 +1,20 @@
 const getFunds = require("../message/fund");
 const getAIAns = require("../message/AI-Tencent");
-const PANG_CODE = ["005312", "008282", "002168", "160222", "003095"];
+const PANG_CODE = ["008282", "002168", "160222", "003095"];
 const fundCodesOfYang = ["260108", "000404", "161725", "000248"];
 const fundCodesOfRan = ["161725", "160222"];
+const fundCodesOfJI = ["005827", "160222", "161725", "008282", "400015"];
+
 const routes = [
 	{ keyword: "基金召唤兽", handle: () => getFunds() },
 	{ keyword: "小胖の基金", handle: () => getFunds(PANG_CODE) },
 	{ keyword: "阿漾的基金", handle: () => getFunds(fundCodesOfYang) },
 	{ keyword: "然子的基金", handle: () => getFunds(fundCodesOfRan) },
+	{ keyword: "阿吉的基金", handle: () => getFunds(fundCodesOfJI) },
 	{ keyword: "@基金小助手", handle: getAIAns },
 ];
 // const roomList = ["测试"];
-const roomList = ["对韭当割", "测试", "一群很哇塞的人"];
+const roomList = ["对韭当割", "居居扛把子", "一群很哇塞的人"];
 async function handleMessage(msg) {
 	// const text = msg.toString();
 	const text = msg.text();

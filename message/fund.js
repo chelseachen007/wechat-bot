@@ -1,5 +1,5 @@
 const axios = require("axios");
-
+const { decode } = require("iconv-lite");
 const fundCodes = [
 	"161725", // 招商白酒
 	"110022", // 易方达消费
@@ -54,27 +54,35 @@ function getFund(code) {
 			};
 		})
 		.catch(() => {
-			const urlB = `http://hq.sinajs.cn/list=f_${code}`;
-			return axios({
-				method: "get",
-				url: urlB,
-			})
-				.then(({ data }) => {
-					const arr = data.split('"')[1].split(",");
-					const name = decodeURIComponent(arr[0]);
-					const todayVal = arr[1];
-					const yesterdayVal = arr[3];
-					const date = arr[4];
-					const rate = +(
-						((todayVal - yesterdayVal) / yesterdayVal) *
-						100
-					).toFixed(2);
-					return { name, date, rate };
-				})
-				.catch(console.log);
+			getSinaFund(code);
 		});
 }
-
+const getSinaFund = (code) => {
+	const urlB = `http://hq.sinajs.cn/list=f_${code}`;
+	return axios
+		.get(urlB, {
+			responseType: "arraybuffer",
+			transformResponse: [
+				(data) => {
+					const body = decode(data, "GB18030");
+					return body;
+				},
+			],
+		})
+		.then((res) => {
+			const { data } = res;
+			const arr = data.split('"')[1].split(",");
+			const name = decodeURIComponent(arr[0]);
+			const todayVal = arr[1];
+			const yesterdayVal = arr[3];
+			const date = arr[4];
+			const rate = +(((todayVal - yesterdayVal) / yesterdayVal) * 100).toFixed(
+				2
+			);
+			return { name, date, rate };
+		})
+		.catch(console.log);
+};
 async function getFunds(codes = fundCodes) {
 	return Promise.all(codes.map(getFund)).then((list) => formatOutput(list));
 }
