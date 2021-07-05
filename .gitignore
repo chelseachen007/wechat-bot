@@ -1,7 +1,8 @@
 .DS_Store
 node_modules/
 dist/
-wechat-bot.memory-card.json
+wechat-bot.memory-card.*
+wechat-bot.memory-card*
 wechat.config.js
 npm-debug.log*
 wechat.config.js
